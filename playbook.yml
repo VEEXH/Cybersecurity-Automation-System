@@ -1,0 +1,30 @@
+---
+- hosts: localhost # Run the playbook on the local host (the container)
+  become: yes # Use sudo to execute tasks that require root privileges
+
+  tasks:
+    - name: Install nmap # Install nmap, a network scanning tool, using apt module
+      apt:
+        name: nmap
+        state: present
+
+    - name: Install nikto # Install nikto, a web server vulnerability scanner, using apt module
+      apt:
+        name: nikto
+        state: present
+
+    - name: Create a user named hacker # Create a user named hacker using user module
+      user:
+        name: hacker
+        password: $6$rounds=65536$AzYFumGkTYLQ7Zzz$y0nBxj./RyUZcUwWVXyRJZk5HbwoS9w9./nqXoZmr48yCwXjJFwvJYVYgNqzqoHjyRZzYqo7l9o6k/4lJ8p5m0 # The hashed password is "password"
+        shell: /bin/bash
+
+    - name: Add hacker to sudo group # Add hacker to sudo group using user module
+      user:
+        name: hacker
+        groups: sudo
+
+    - name: Set permissions for automate.py # Set permissions for automate.py using file module
+      file:
+        path: /home/automate.py
+        mode: u+x # Make it executable by the owner (the user who runs the container)
