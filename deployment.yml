@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cybersecurity-automation
+  labels:
+    app: cybersecurity-automation
+spec:
+  replicas: 3 # Run three pods for redundancy and scalability
+  selector:
+    matchLabels:
+      app: cybersecurity-automation
+  template:
+    metadata:
+      labels:
+        app: cybersecurity-automation
+    spec:
+      containers:
+      - name: cybersecurity-automation
+        image: cybersecurity-automation # Use the custom image built from the Dockerfile
+        resources:
+          requests: # Specify the minimum resources required for each pod
+            cpu: 1
+            memory: 1Gi
+          limits: # Specify the maximum resources allowed for each pod
+            cpu: 2
+            memory: 2Gi
+        securityContext: # Apply some security settings for each container
+          runAsUser: 1000 # Run as a non-root user
+          runAsGroup: 1000 # Run as a non-root group
+          allowPrivilegeEscalation: false # Do not allow privilege escalation
+          readOnlyRootFilesystem: true # Mount the root filesystem as read-only
